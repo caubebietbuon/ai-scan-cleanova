@@ -9,9 +9,25 @@ const {
 } = require('../config/businessRules');
 
 // Xác định mức độ bẩn từ điểm tổng (0-100)
+//
+// LƯU Ý QUAN TRỌNG: KHÔNG dùng `find(l => score >= l.minScore && score <= l.maxScore)`
+// rồi fallback về mức CUỐI. Cách đó có 2 lỗi chết người:
+//   1) Điểm thập phân lọt qua khe hở giữa các dải. Ví dụ score = 24.6:
+//      dải [0,24] không khớp (24.6 > 24), dải [25,44] cũng không khớp (24.6 < 25)
+//      -> `find` trả undefined -> fallback về "Rất bẩn" x2.0. Nhà SẠCH bị tính
+//      giá cao nhất (đúng triệu chứng: "Rất bẩn · bẩn 24/100").
+//   2) NaN / undefined / số âm cũng rơi vào fallback -> luôn ra mức cao nhất.
+//
+// Cách đúng: kẹp điểm về [0,100] trước, rồi dò từ mức CAO xuống THẤP và lấy
+// mức đầu tiên mà score >= minScore. Không còn khe hở, không còn fallback sai.
 function resolveDirtLevel(score) {
-  const found = DIRT_LEVELS.find(l => score >= l.minScore && score <= l.maxScore);
-  return found || DIRT_LEVELS[DIRT_LEVELS.length - 1];
+  const s = Number(score);
+  const safe = Number.isFinite(s) ? Math.min(100, Math.max(0, s)) : 0;
+
+  for (let i = DIRT_LEVELS.length - 1; i >= 0; i -= 1) {
+    if (safe >= DIRT_LEVELS[i].minScore) return DIRT_LEVELS[i];
+  }
+  return DIRT_LEVELS[0]; // chỉ tới đây khi DIRT_LEVELS rỗng
 }
 
 // Chọn gói dịch vụ phù hợp nhất với mức độ bẩn

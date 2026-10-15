@@ -6,12 +6,15 @@
 // ============================================================
 
 // --- Ngưỡng điểm bẩn (0-100) -> mức độ ---
+// Dải liền mạch: mỗi mức bắt đầu từ minScore và kéo tới SÁT mức kế tiếp.
+// maxScore chỉ để tham chiếu/hiển thị — resolveDirtLevel() dò theo minScore
+// nên không phụ thuộc maxScore, tránh khe hở với điểm thập phân.
 const DIRT_LEVELS = [
-  { level: 'clean',     label: 'Sạch',        minScore: 0,  maxScore: 24,  priceMultiplier: 1.0 },
-  { level: 'light',     label: 'Bẩn nhẹ',     minScore: 25, maxScore: 44,  priceMultiplier: 1.15 },
-  { level: 'moderate',  label: 'Bẩn vừa',     minScore: 45, maxScore: 64,  priceMultiplier: 1.35 },
-  { level: 'heavy',     label: 'Bẩn nặng',    minScore: 65, maxScore: 84,  priceMultiplier: 1.6 },
-  { level: 'very_heavy',label: 'Rất bẩn',     minScore: 85, maxScore: 100, priceMultiplier: 2.0 }
+  { level: 'clean',     label: 'Sạch',        minScore: 0,  maxScore: 24.99, priceMultiplier: 1.0 },
+  { level: 'light',     label: 'Bẩn nhẹ',     minScore: 25, maxScore: 44.99, priceMultiplier: 1.15 },
+  { level: 'moderate',  label: 'Bẩn vừa',     minScore: 45, maxScore: 64.99, priceMultiplier: 1.35 },
+  { level: 'heavy',     label: 'Bẩn nặng',    minScore: 65, maxScore: 84.99, priceMultiplier: 1.6 },
+  { level: 'very_heavy',label: 'Rất bẩn',     minScore: 85, maxScore: 100,   priceMultiplier: 2.0 }
 ];
 
 // --- Gói dịch vụ gợi ý (đơn giá theo m2, VNĐ) ---

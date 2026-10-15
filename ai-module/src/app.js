@@ -23,8 +23,14 @@ app.use(express.urlencoded({ extended: true }));
 // --- API ---
 app.use('/api/ai', aiRoutes);
 
-// Trang kiểm tra nhanh
-app.get('/', (req, res) => {
+// --- Giao diện demo tĩnh (thư mục public/) ---
+// Phục vụ cả ở gốc (http://host:5100) và dưới /demo để tiện truy cập.
+const publicPath = path.join(__dirname, '../public');
+app.use(express.static(publicPath));
+app.use('/demo', express.static(publicPath));
+
+// Thông tin module dạng JSON (trước đây ở "/", nay chuyển sang "/info")
+app.get('/info', (req, res) => {
   res.json({
     service: 'Cleanova AI Module',
     version: '1.0.0',
@@ -37,12 +43,6 @@ app.get('/', (req, res) => {
     demo: '/index.html'
   });
 });
-
-// --- Giao diện demo tĩnh (thư mục public/) ---
-// Phục vụ cả ở gốc (http://host:5100) và dưới /demo để tiện truy cập.
-const publicPath = path.join(__dirname, '../public');
-app.use(express.static(publicPath));
-app.use('/demo', express.static(publicPath));
 
 // 404 cho API
 app.use('/api/*', (req, res) => {

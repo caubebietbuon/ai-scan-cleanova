@@ -37,6 +37,14 @@ function handleUpload(req, res, next) {
   });
 }
 
+function buildFileMeta(file) {
+  return {
+    filename: file.originalname,
+    mimetype: file.mimetype,
+    size: file.size
+  };
+}
+
 // ------------------------------------------------------------
 // POST /api/ai/analyze
 // Body: multipart/form-data, field "image"
@@ -44,11 +52,7 @@ function handleUpload(req, res, next) {
 // ------------------------------------------------------------
 router.post('/analyze', handleUpload, async (req, res, next) => {
   try {
-    const analysis = await analyzeImage(req.file.buffer, {
-      filename: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size
-    });
+    const analysis = await analyzeImage(req.file.buffer, buildFileMeta(req.file));
 
     const level = resolveDirtLevel(analysis.overallScore);
     const recommendations = buildRecommendations(analysis.signals, level.level);
@@ -81,11 +85,7 @@ router.post('/analyze', handleUpload, async (req, res, next) => {
 // ------------------------------------------------------------
 router.post('/estimate', handleUpload, async (req, res, next) => {
   try {
-    const analysis = await analyzeImage(req.file.buffer, {
-      filename: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size
-    });
+    const analysis = await analyzeImage(req.file.buffer, buildFileMeta(req.file));
 
     const extras = req.body.extras
       ? String(req.body.extras).split(',').map(s => s.trim()).filter(Boolean)
