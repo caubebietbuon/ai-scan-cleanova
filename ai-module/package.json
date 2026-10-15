@@ -1,0 +1,27 @@
+{
+  "name": "cleanova-ai-module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Module AI độc lập: quét ảnh phòng, phân tích độ bẩn và gợi ý mức giá dịch vụ cho Cleanova",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/analyze.test.js"
+  },
+  "keywords": [
+    "cleanova",
+    "ai",
+    "image-analysis",
+    "pricing",
+    "express"
+  ],
+  "author": "Cleanova Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^2.4.0"
+  }
+}
