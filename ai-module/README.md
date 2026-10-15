@@ -30,8 +30,13 @@ flowchart LR
 ```bash
 cd ai-module
 npm install
+cp .env.example .env      # Windows: copy .env.example .env
 npm start
 ```
+
+> 💡 File `.env` **không được commit** lên git (chứa cấu hình/API key).
+> Sau khi clone về, chỉ cần copy từ `.env.example`. Nếu không tạo `.env`,
+> module vẫn chạy với giá trị mặc định.
 
 Mở trình duyệt:
 
